@@ -4,341 +4,558 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Base64 Converter and JSON Validator</title>
+    <title>SMART Converter</title>
+    
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: rgb(2, 0, 36);
-            background: linear-gradient(90deg, rgb(0, 7, 36) 0%, rgb(5, 44, 102) 55%, rgb(255, 81, 0) 100%);
-        }
+        /* styles.css */
 
-        .container {
-            max-width: 1000px;
-            width: 99%;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            margin: 50px auto;
-        }
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Navbar */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .title {
+    font-weight: bold;
+  }
+  
+  .circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Tabs */
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .tab-container {
+    display: flex;
+  }
+  
+  .tab {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    margin-right: 10px;
+    border-radius: 5px 5px 0 0;
+  }
+  
+  .tab:hover {
+    background-color: #0056b3;
+  }
+  
+  .tab-content {
+    width: 80%;
+    height: 45vw; /* 16:9 aspect ratio */
+    overflow: hidden;
+    margin-top: 20px;
+  }
+  
+  .tab-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  
+  /* Footer */
+  .footer {
+    margin-top: 50px;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
 
+    /* XML Syntax Highlighting */
+    .xml .tag {
+        color: orange;
+    }
+
+    .xml .attribute {
+        color: green;
+    }
+
+    .xml .value {
+        color: blue;
+    }
+
+    .xml .comment {
+        color: gray;
+    }
+
+    .xml .cdata {
+        color: purple;
+    }
+
+    .xml .text {
+        color: black;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        
+    }
+    
+    .container {
+        max-width: 1000px;
+        width: 99%;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        margin: 50px auto;
+    }
+    
+    .input-output {
+        margin-bottom: 20px;
+    }
+    
+    textarea {
+        width: calc(100% - 20px);
+        height: 200px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        font-size: 16px;
+    }
+    
+    .btn {
+        background-color: #4caf50;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        display: inline-block;
+        margin: 10px 10px 10px 0;
+        font-size: 14px;
+        transition: background-color 0.3s;
+    }
+    
+    .btn:hover {
+        background-color: #45a049;
+    }
+    
+    .output {
+        margin-top: 10px;
+        display: block;
+    }
+    
+    #imageOutput {
+        max-width: calc(90% - 40px);
+        display: block;
+        margin: auto;
+    
+    }
+    
+    #base64Output {
+        height: 150px;
+    }
+    
+    .reset-btn {
+        background-color: #f44336;
+    }
+    
+    .download-btn {
+        background-color: #2196F3;
+    }
+    
+    @media screen and (max-width: 600px) {
         .input-output {
-            margin-bottom: 20px;
-        }
-
-        textarea {
             width: calc(100% - 20px);
-            height: 200px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            font-size: 16px;
         }
-
-        .btn {
-            background-color: #4caf50;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            display: inline-block;
-            margin: 10px 10px 10px 0;
-            font-size: 14px;
-            transition: background-color 0.3s;
-        }
-
-        .btn:hover {
-            background-color: #45a049;
-        }
-
-        .output {
-            margin-top: 10px;
-            display: block;
-        }
-
-        #imageOutput {
-            max-width: calc(90% - 40px);
-            display: block;
-            margin: auto;
-
-        }
-
-        #base64Output {
-            height: 150px;
-        }
-
-        .reset-btn {
-            background-color: #f44336;
-        }
-
-        .download-btn {
-            background-color: #2196F3;
-        }
-
-        @media screen and (max-width: 600px) {
-            .input-output {
-                width: calc(100% - 20px);
-            }
-        }
-
-        /* JSON Syntax Highlighting */
-        .json .key {
-            color: blue;
-        }
-
-        .json .string {
-            color: green;
-        }
-
-        .json .number {
-            color: orange;
-        }
-
-        .json .boolean {
-            color: teal;
-        }
-
-        .json .null {
-            color: red;
-        }
-
-        .navbar {
-            background: rgb(2, 0, 36);
-            background: linear-gradient(90deg, rgb(0, 7, 36) 0%, rgb(5, 44, 102) 55%, rgb(255, 81, 0) 100%);
-            overflow: hidden;
-            text-align: center;
-            /* Center align the items */
-        }
-
-        .navbar a {
-            display: inline-block;
-            /* Display the items in line */
-            color: #f2f2f2;
-            text-align: center;
-            padding: 14px 20px;
-            text-decoration: none;
-            font-size: 17px;
-        }
-
-        .navbar a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-
-        .navbar .icon {
+    }
+    
+    /* JSON Syntax Highlighting */
+    .json .key {
+        color: blue;
+    }
+    
+    .json .string {
+        color: green;
+    }
+    
+    .json .number {
+        color: orange;
+    }
+    
+    .json .boolean {
+        color: teal;
+    }
+    
+    .json .null {
+        color: red;
+    }
+    
+    .navbar {
+        background: rgb(2, 0, 36);
+        background: linear-gradient(90deg, rgb(0, 7, 36) 0%, rgb(5, 44, 102) 55%, rgb(255, 81, 0) 100%);
+        overflow: hidden;
+        text-align: center;
+        /* Center align the items */
+    }
+    
+    .navbar a {
+        display: inline-block;
+        /* Display the items in line */
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 20px;
+        text-decoration: none;
+        font-size: 17px;
+    }
+    
+    .navbar a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+    
+    .navbar .icon {
+        display: none;
+    }
+    
+    @media screen and (max-width: 600px) {
+        .navbar a:not(:first-child) {
             display: none;
         }
-
-        @media screen and (max-width: 600px) {
-            .navbar a:not(:first-child) {
-                display: none;
-            }
-
-            .navbar a.icon {
-                float: right;
-                display: block;
-            }
+    
+        .navbar a.icon {
+            float: right;
+            display: block;
         }
-
-        @media screen and (max-width: 600px) {
-            .navbar.responsive {
-                position: relative;
-            }
-
-            .navbar.responsive .icon {
-                position: absolute;
-                right: 0;
-                top: 0;
-            }
-
-            .navbar.responsive a {
-                float: none;
-                display: block;
-                text-align: left;
-            }
+    }
+    
+    @media screen and (max-width: 600px) {
+        .navbar.responsive {
+            position: relative;
         }
-
-        .footer {
-            background: rgb(2, 0, 36);
-            background: linear-gradient(90deg, rgb(0, 7, 36) 0%, rgb(5, 44, 102) 55%, rgb(255, 81, 0) 100%);
-            color: white;
-            padding: 1px;
-            text-align: center;
-            position: fixed;
-            left: 0;
-            bottom: 0;
-            width: 100%;
+    
+        .navbar.responsive .icon {
+            position: absolute;
+            right: 0;
+            top: 0;
         }
-
-        .rdm {
-            font-size: 9px;
-            /* Very small font size */
-            visibility: 40%;
-            margin-left: 65%;
+    
+        .navbar.responsive a {
+            float: none;
+            display: block;
+            text-align: left;
         }
+    }
+    
+    .footer {
+        background: rgb(2, 0, 36);
+        background: linear-gradient(90deg, rgb(0, 7, 36) 0%, rgb(5, 44, 102) 55%, rgb(255, 81, 0) 100%);
+        color: white;
+        padding: 1px;
+        text-align: center;
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+    }
+    
+    .rdm {
+        font-size: 9px;
+        /* Very small font size */
+        visibility: 40%;
+        margin-left: 65%;
+    }
     </style>
+    
 </head>
 
 <body>
-
-    <div class="navbar" id="myNavbar">
-        <div class="title">
-            <h1 style="color: #f2f2f2;">SMART CONVERTER</h1>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <span class="title">SMART CONVERT</span>
         </div>
-        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
-            <i class="fa fa-bars"></i>
-        </a>
-    </div>
+        <div class="navbar-right">
+            <div class="circle">
+                <img src="your-image-path.jpg" alt="">
+            </div>
+        </div>
+    </nav>
 
     <div class="container">
-        <div class="input-output">
-            <textarea id="base64Input" placeholder="Enter Base64 code/text"></textarea>
-            <img id="imageOutput" src="" alt="Output Image" class="output">
-            <button class="btn" onclick="convertToImage()">Convert to Image</button>
-            <button class="btn download-btn" onclick="downloadImage()">Download Image</button>
-            <button class="btn reset-btn" onclick="resetInputOutput('base64Input','imageOutput')">Reset</button>
+        <div class="tab-container">
+            <div class="tab" onclick="openTab('base64')">Base64 to Image</div>
+            <div class="tab" onclick="openTab('image')">Image to Base64</div>
+            <div class="tab" onclick="openTab('json')">JSON Validator</div>
+            <div class="tab" onclick="openTab('xml')">XML Validator</div>
         </div>
+        <div id="base64" class="tab-content" style="display: none;">
+            <!-- Content for Base64 to Image tab -->
+            <div class="input-output">
+                <textarea id="base64Input" placeholder="Enter Base64 code/text"></textarea>
+                <img id="imageOutput" src="" alt="" class="output">
+                <button class="btn" onclick="convertToImage()">Convert to Image</button>
+                <button class="btn download-btn" onclick="downloadImage()">Download Image</button>
+                <button class="btn reset-btn" onclick="resetInputOutput('base64Input','imageOutput')">Reset</button>
+            </div>
 
-        <div class="input-output">
-            <textarea id="jsonInput" placeholder="Enter your JSON here"></textarea>
-            <div class="result json" id="resultArea"></div>
-            <button class="btn" onclick="validateAndPrettify()">Validate & Prettify</button>
-            <button class="btn download-btn" onclick="downloadJson()">Download JSON</button>
-            <button class="btn reset-btn" onclick="resetInputOutput('jsonInput','resultArea')">Reset</button>
         </div>
+        <div id="image" class="tab-content" style="display: none;">
+            <!-- Content for Image to Base64 tab -->
+            <div class="input-output">
+                <input type="file" id="imageInput" accept="image/*">
+                <textarea id="base64Output" placeholder="Output Base64" readonly></textarea>
+                <button class="btn" onclick="convertToBase64()">Convert to Base64</button>
+                <button class="btn download-btn" onclick="downloadBase64()">Download Base64</button>
+                <button class="btn reset-btn" onclick="resetInputOutput('imageInput','base64Output')">Reset</button>
+            </div>
 
-        <div class="input-output">
-            <input type="file" id="imageInput" accept="image/*">
-            <textarea id="base64Output" placeholder="Output Base64" readonly></textarea>
-            <button class="btn" onclick="convertToBase64()">Convert to Base64</button>
-            <button class="btn download-btn" onclick="downloadBase64()">Download Base64</button>
-            <button class="btn reset-btn" onclick="resetInputOutput('imageInput','base64Output')">Reset</button>
         </div>
+        <div id="json" class="tab-content" ">
+            <!-- Content for JSON Validator tab -->
+            <div class="input-output">
+                <textarea id="jsonInput" placeholder="Enter your JSON here"></textarea>
+                <div class="result json" id="resultArea"></div>
+                <button class="btn" onclick="validateAndPrettify()">Validate & Prettify</button>
+                <button class="btn download-btn" onclick="downloadJson()">Download JSON</button>
+                <button class="btn reset-btn" onclick="resetInputOutput('jsonInput','resultArea')">Reset</button>
+            </div>
+        </div>
+        <div id="xml" class="tab-content" style="display: none;">
+            <!-- Content for XML Validator tab -->
 
+            <div class="input-output">
+                <textarea id="xmlInput" placeholder="Enter your XML here"></textarea>
+                <div class="result xml" id="xmlResultArea"></div>
+                <button class="btn" onclick="validateAndPrettifyXML()">Validate & Prettify XML</button>
+                <button class="btn download-btn" onclick="downloadXML()">Download XML</button>
+                <button class="btn reset-btn" onclick="resetInputOutput('xmlInput','xmlResultArea')">Reset</button>
+            </div>
+        </div>
 
         <footer class="footer">
             <p class="rdm">Smart Connect | Base64 to Image converter | Image to Base64 converter | Json Validator and
                 Pretifier by ©RDM2024</p> <!-- RDM added at the end -->
         </footer>
 
+        <script>
+
+// script.js
+var currentTab = 'base64';
+
+function openTab(tabName) {
+  document.getElementById(currentTab).style.display = "none";
+  document.getElementById(tabName).style.display = "block";
+  currentTab = tabName;
+}
 
 
+function convertToImage() {
+    var base64Input = document.getElementById("base64Input").value;
+    var imageOutput = document.getElementById("imageOutput");
+    imageOutput.src = "data:image/png;base64," + base64Input;
+}
 
-    </div>
+function downloadImage() {
+    var imageOutput = document.getElementById("imageOutput");
+    var link = document.createElement('a');
+    link.href = imageOutput.src;
+    link.download = 'output_image.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 
+function convertToBase64() {
+    var fileInput = document.getElementById("imageInput");
+    var base64Output = document.getElementById("base64Output");
 
-    <script>
-        function convertToImage() {
-            var base64Input = document.getElementById("base64Input").value;
-            var imageOutput = document.getElementById("imageOutput");
-            imageOutput.src = "data:image/png;base64," + base64Input;
-        }
+    var file = fileInput.files[0];
+    var reader = new FileReader();
 
-        function downloadImage() {
-            var imageOutput = document.getElementById("imageOutput");
-            var link = document.createElement('a');
-            link.href = imageOutput.src;
-            link.download = 'output_image.png';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
+    reader.onload = function (e) {
+        base64Output.value = e.target.result.split(',')[1];
+    };
 
-        function convertToBase64() {
-            var fileInput = document.getElementById("imageInput");
-            var base64Output = document.getElementById("base64Output");
+    reader.readAsDataURL(file);
+}
 
-            var file = fileInput.files[0];
-            var reader = new FileReader();
+function downloadBase64() {
+    var base64Output = document.getElementById("base64Output").value;
+    var link = document.createElement('a');
+    link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(base64Output);
+    link.download = 'output_base64.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 
-            reader.onload = function (e) {
-                base64Output.value = e.target.result.split(',')[1];
-            };
-
-            reader.readAsDataURL(file);
-        }
-
-        function downloadBase64() {
-            var base64Output = document.getElementById("base64Output").value;
-            var link = document.createElement('a');
-            link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(base64Output);
-            link.download = 'output_base64.txt';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-        
-        function validateAndPrettify() {
-            var jsonInput = document.getElementById("jsonInput").value;
-            try {
-                var parsedJson = JSON.parse(jsonInput);
-                var prettifiedJson = JSON.stringify(parsedJson, null, 2); // 2 spaces indentation
-                prettifiedJson = prettifiedJson.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(\.\d*)?(e-?\d+)?)/g, function (match) {
-                    var cls = 'number';
-                    if (/^"/.test(match)) {
-                        if (/:$/.test(match)) {
-                            cls = 'key';
-                        } else {
-                            cls = 'string';
-                        }
-                    } else if (/true|false/.test(match)) {
-                        cls = 'boolean';
-                    } else if (/null/.test(match)) {
-                        cls = 'null';
-                    }
-                    return '<span class="' + cls + '">' + match + '</span>';
-                });
-                document.getElementById("resultArea").setAttribute("contentEditable", "true");
-                document.getElementById("resultArea").innerHTML = "<pre>" + prettifiedJson + "</pre>";
-            } catch (error) {
-                document.getElementById("resultArea").innerText = "Invalid JSON:\n\n" + error;
+function validateAndPrettify() {
+    var jsonInput = document.getElementById("jsonInput").value;
+    try {
+        var parsedJson = JSON.parse(jsonInput);
+        var prettifiedJson = JSON.stringify(parsedJson, null, 2); // 2 spaces indentation
+        prettifiedJson = prettifiedJson.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(\.\d*)?(e-?\d+)?)/g, function (match) {
+            var cls = 'number';
+            if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                    cls = 'key';
+                } else {
+                    cls = 'string';
+                }
+            } else if (/true|false/.test(match)) {
+                cls = 'boolean';
+            } else if (/null/.test(match)) {
+                cls = 'null';
             }
+            return '<span class="' + cls + '">' + match + '</span>';
+        });
+        document.getElementById("resultArea").setAttribute("contentEditable", "true");
+        document.getElementById("resultArea").innerHTML = "<pre>" + prettifiedJson + "</pre>";
+    } catch (error) {
+        document.getElementById("resultArea").innerText = "Invalid JSON:\n\n" + error;
+    }
+}
+
+
+function downloadJson() {
+    var prettifiedJson = document.getElementById("resultArea").innerText;
+    var link = document.createElement('a');
+    link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(prettifiedJson);
+    link.download = 'output_json.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+function resetInputOutput(inputId, outputId) {
+    document.getElementById(inputId).value = '';
+    if (outputId !== null) {
+        document.getElementById(outputId).src = '';
+        document.getElementById(outputId).value = '';
+    }
+}
+
+function myFunction() {
+    var x = document.getElementById("myNavbar");
+    if (x.className === "navbar") {
+        x.className += " responsive";
+    } else {
+        x.className = "navbar";
+    }
+}
+
+var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+var rootElement = document.documentElement;
+
+function scrollToTop() {
+    // Scroll to top logic
+    rootElement.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+scrollToTopBtn.addEventListener("click", scrollToTop);
+
+function validateAndPrettifyXML() {
+    var xmlInput = document.getElementById("xmlInput").value;
+    try {
+        var parser = new DOMParser();
+        var xmlDoc = parser.parseFromString(xmlInput, "text/xml");
+
+        var prettifiedXml = formatXml(xmlDoc);
+
+        document.getElementById("xmlResultArea").setAttribute("contentEditable", "true");
+        document.getElementById("xmlResultArea").innerHTML = prettifiedXml;
+    } catch (error) {
+        document.getElementById("xmlResultArea").innerText = "Invalid XML:\n\n" + error;
+    }
+}
+
+function downloadXML() {
+    var prettifiedXml = document.getElementById("xmlResultArea").innerText;
+    var link = document.createElement('a');
+    link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(prettifiedXml);
+    link.download = 'output_xml.xml';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+function resetInputOutput(inputId, outputId) {
+    document.getElementById(inputId).value = '';
+    if (outputId !== null) {
+        document.getElementById(outputId).innerText = '';
+    }
+}
+
+function formatXml(xml) {
+    var formattedXml = '';
+    var tab = '  ';
+    var indentLevel = 0;
+
+    function formatElement(element) {
+        var tagName = element.tagName;
+        var attributes = Array.from(element.attributes)
+            .map(attr => ` ${attr.nodeName}="${attr.nodeValue}"`)
+            .join('');
+
+        formattedXml += `${tab.repeat(indentLevel)}<span class="tag">${tagName}</span>${attributes}`;
+
+        if (element.childNodes.length === 0) {
+            formattedXml += '/>';
+            return;
         }
 
+        formattedXml += '>';
 
-        function downloadJson() {
-            var prettifiedJson = document.getElementById("resultArea").innerText;
-            var link = document.createElement('a');
-            link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(prettifiedJson);
-            link.download = 'output_json.txt';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        function resetInputOutput(inputId, outputId) {
-            document.getElementById(inputId).value = '';
-            if (outputId !== null) {
-                document.getElementById(outputId).src = '';
-                document.getElementById(outputId).value = '';
-            }
-        }
-
-        function myFunction() {
-            var x = document.getElementById("myNavbar");
-            if (x.className === "navbar") {
-                x.className += " responsive";
-            } else {
-                x.className = "navbar";
-            }
-        }
-
-        var scrollToTopBtn = document.getElementById("scrollToTopBtn");
-        var rootElement = document.documentElement;
-
-        function scrollToTop() {
-            // Scroll to top logic
-            rootElement.scrollTo({
-                top: 0,
-                behavior: "smooth"
+        if (element.childNodes.length === 1 && element.firstChild.nodeType === Node.TEXT_NODE) {
+            formattedXml += `<span class="text">${element.textContent.trim()}</span>`;
+        } else {
+            formattedXml += '\n';
+            indentLevel++;
+            Array.from(element.childNodes).forEach(child => {
+                if (child.nodeType === Node.ELEMENT_NODE) {
+                    formatElement(child);
+                    formattedXml += '\n';
+                } else if (child.nodeType === Node.TEXT_NODE && child.nodeValue.trim().length > 0) {
+                    formattedXml += `${tab.repeat(indentLevel)}<span class="text">${child.nodeValue.trim()}</span>\n`;
+                }
             });
+            indentLevel--;
+            formattedXml += `${tab.repeat(indentLevel)}`;
         }
-        scrollToTopBtn.addEventListener("click", scrollToTop);
 
-    </script>
+        formattedXml += `</span><span class="tag">${tagName}</span>`;
+    }
+
+    formatElement(xml.documentElement);
+    return formattedXml;
+}
+
+        </script>
+    
+
 </body>
 
 </html>
